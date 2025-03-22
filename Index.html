@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LexIA - Biblioteca Virtual</title>
+    <style>
+        :root {
+            --primary: #4a6fa5;
+            --secondary: #166088;
+            --accent: #4fc3f7;
+            --light: #f5f7fa;
+            --dark: #2c3e50;
+            --success: #66bb6a;
+            --danger: #ef5350;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo span {
+            color: var(--accent);
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 1.5rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+        
+        .search-bar {
+            display: flex;
+            margin: 2rem auto;
+            max-width: 600px;
+            background: white;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        }
+        
+        .search-bar input {
+            flex: 1;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+        }
+        
+        .search-bar button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0 1.5rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .search-bar button:hover {
+            background-color: var(--secondary);
+        }
+        
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .categories {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .category {
+            background-color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .category:hover, .category.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .books-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .book-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .book-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .book-image {
+            height: 200px;
+            background-color: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .book-info {
+            padding: 1rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .book-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+        
+        .book-author {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .book-description {
+            font-size: 0.85rem;
+            color: #777;
+            margin-bottom: 1rem;
+            flex: 1;
+        }
+        
+        .book-button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .book-button:hover {
+            background-color: var(--secondary);
+        }
+        
+        .admin-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+            margin-top: 2rem;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            color: var(--dark);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary);
+        }
+        
+        .admin-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .admin-card {
+            background-color: var(--light);
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+        
+        .admin-card:hover {
+            transform: translateY(-3px);
+        }
+        
+        .admin-card-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+        }
+        
+        .admin-card-icon {
+            margin-right: 0.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .admin-card-description {
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        
+        .footer-column {
+            flex: 1;
+            min-width: 200px;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-title {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            color: #999;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .nav-links {
+                margin-top: 1rem;
+                flex-wrap: wrap;
+            }
+            
+            .nav-links li {
+                margin-left: 0;
+                margin-right: 1rem;
+                margin-bottom: 0.5rem;
+            }
+            
+            .books-container {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+            
+            .admin-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">Lex<span>IA</span></div>
+            <ul class="nav-links">
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#categorias">Categorías</a></li>
+                <li><a href="#novedades">Novedades</a></li>
+                <li><a href="#administracion">Administración</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+            </ul>
+        </nav>
+        
+        <div class="search-bar">
+            <input type="text" placeholder="Buscar por título, autor o tema...">
+            <button>Buscar</button>
+        </div>
+    </header>
+    
+    <main>
+        <section id="categorias">
+            <div class="categories">
+                <div class="category active">Todos</div>
+                <div class="category">Literatura</div>
+                <div class="category">Ciencia</div>
+                <div class="category">Historia</div>
+                <div class="category">Filosofía</div>
+                <div class="category">Tecnología</div>
+                <div class="category">Arte</div>
+                <div class="category">Educación</div>
+            </div>
+            
+            <div class="books-container">
+                <!-- Libro 1 -->
+                <div class="book-card">
+                    <div class="book-image">
+                        <img src="/api/placeholder/220/200" alt="Portada del libro">
+                    </div>
+                    <div class="book-info">
+                        <div class="book-title">Cien años de soledad</div>
+                        <div class="book-author">Gabriel García Márquez</div>
+                        <div class="book-description">
+                            Una obra maestra de la literatura latinoamericana que narra la historia de la familia Buendía.
+                        </div>
+                        <a href="#" class="book-button">Leer ahora</a>
+                    </div>
+                </div>
+                
+                <!-- Libro 2 -->
+                <div class="book-card">
+                    <div class="book-image">
+                        <img src="/api/placeholder/220/200" alt="Portada del libro">
+                    </div>
+                    <div class="book-info">
+                        <div class="book-title">Inteligencia Artificial</div>
+                        <div class="book-author">Stuart Russell, Peter Norvig</div>
+                        <div class="book-description">
+                            Un enfoque moderno sobre los fundamentos de la inteligencia artificial.
+                        </div>
+                        <a href="#" class="book-button">Leer ahora</a>
+                    </div>
+                </div>
+                
+                <!-- Libro 3 -->
+                <div class="book-card">
+                    <div class="book-image">
+                        <img src="/api/placeholder/220/200" alt="Portada del libro">
+                    </div>
+                    <div class="book-info">
+                        <div class="book-title">Historia del Arte</div>
+                        <div class="book-author">E.H. Gombrich</div>
+                        <div class="book-description">
+                            Una introducción a la historia del arte occidental desde sus inicios hasta la época contemporánea.
+                        </div>
+                        <a href="#" class="book-button">Leer ahora</a>
+                    </div>
+                </div>
+                
+                <!-- Libro 4 -->
+                <div class="book-card">
+                    <div class="book-image">
+                        <img src="/api/placeholder/220/200" alt="Portada del libro">
+                    </div>
+                    <div class="book-info">
+                        <div class="book-title">El origen de las especies</div>
+                        <div class="book-author">Charles Darwin</div>
+                        <div class="book-description">
+                            Obra fundamental que establece las bases de la teoría de la evolución mediante la selección natural.
+                        </div>
+                        <a href="#" class="book-button">Leer ahora</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="administracion" class="admin-section">
+            <h2 class="section-title">Panel de Administración</h2>
+            
+            <div class="admin-grid">
+                <!-- Tarjeta 1 -->
+                <div class="admin-card">
+                    <div class="admin-card-title">
+                        <span class="admin-card-icon">📚</span>
+                        Gestionar Libros
+                    </div>
+                    <div class="admin-card-description">
+                        Añadir, editar o eliminar libros de la biblioteca. Organizar por categorías y actualizar metadatos.
+                    </div>
+                    <a href="#" class="book-button">Acceder</a>
+                </div>
+                
+                <!-- Tarjeta 2 -->
+                <div class="admin-card">
+                    <div class="admin-card-title">
+                        <span class="admin-card-icon">👥</span>
+                        Gestionar Usuarios
+                    </div>
+                    <div class="admin-card-description">
+                        Administrar usuarios, permisos y roles. Seguimiento de préstamos y devoluciones.
+                    </div>
+                    <a href="#" class="book-button">Acceder</a>
+                </div>
+                
+                <!-- Tarjeta 3 -->
+                <div class="admin-card">
+                    <div class="admin-card-title">
+                        <span class="admin-card-icon">📊</span>
+                        Estadísticas
+                    </div>
+                    <div class="admin-card-description">
+                        Visualizar métricas de uso, libros más populares y actividad de usuarios en la plataforma.
+                    </div>
+                    <a href="#" class="book-button">Acceder</a>
+                </div>
+                
+                <!-- Tarjeta 4 -->
+                <div class="admin-card">
+                    <div class="admin-card-title">
+                        <span class="admin-card-icon">⚙️</span>
+                        Configuración
+                    </div>
+                    <div class="admin-card-description">
+                        Personalizar la apariencia, ajustar configuraciones y gestionar opciones avanzadas del sistema.
+                    </div>
+                    <a href="#" class="book-button">Acceder</a>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3 class="footer-title">LexIA</h3>
+                <p>Tu biblioteca virtual inteligente para gestionar y acceder a contenido digital de forma eficiente.</p>
+            </div>
+            
+            <div class="footer-column">
+                <h3 class="footer-title">Enlaces</h3>
+                <ul class="footer-links">
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#categorias">Categorías</a></li>
+                    <li><a href="#novedades">Novedades</a></li>
+                    <li><a href="#administracion">Administración</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3 class="footer-title">Soporte</h3>
+                <ul class="footer-links">
+                    <li><a href="#ayuda">Centro de Ayuda</a></li>
+                    <li><a href="#faq">Preguntas Frecuentes</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            &copy; 2025 LexIA Biblioteca Virtual. Todos los derechos reservados.
+        </div>
+    </footer>
+</body>
+</html>
